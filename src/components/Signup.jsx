@@ -14,8 +14,9 @@ export default function Signup() {
     // 이름 속성이 다중값인 경우 위 처럼 추출을해서 직접 객체에 추가해줘야한다.
     const data = Object.fromEntries(fd.entries());
     data.aqcuisition = acquisitionChannel;
-
     console.log(data);
+
+    // event.target.reset();
   }
 
   return (
