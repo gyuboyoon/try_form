@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 export default function Signup() {
+  const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState(false);
+
   function handleSubmit(event) {
     event.preventDefault();
     // 자동으로 생성되는 HTTP요청이 전송되지 않도록 하기위해서
@@ -14,6 +18,11 @@ export default function Signup() {
     // 이름 속성이 다중값인 경우 위 처럼 추출을해서 직접 객체에 추가해줘야한다.
     const data = Object.fromEntries(fd.entries());
     data.aqcuisition = acquisitionChannel;
+
+    if (data.password !== data["confirm-password"]) {
+      setPasswordsAreNotEqual(true);
+      return;
+    }
     console.log(data);
 
     // event.target.reset();
@@ -49,6 +58,9 @@ export default function Signup() {
             type="password"
             name="confirm-password"
           />
+          <div className="control-error">
+            {passwordsAreNotEqual && <p>패스워드가 일치해야 합니다!</p>}
+          </div>
         </div>
       </div>
 
