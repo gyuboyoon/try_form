@@ -2,22 +2,22 @@ import { useState } from "react";
 
 import Input from "./Input.jsx";
 import { isEmail, isNotEmpty, hasMinLength } from "../util/validation.js";
+import { useInput } from "../hooks/useInput.js";
 
 export default function Login() {
-  const [enteredValues, setEnteredValues] = useState({
-    email: "",
-    password: "",
-  });
+  const {
+    value: emailValue,
+    handleInputChage: handleEmailChange,
+    handleInputBlur: handleEmailBlur,
+  } = useInput("", (value) => isEmail(value) && isNotEmpty(value));
 
-  const [didEdit, setDidEdit] = useState({
-    email: false,
-    password: false,
-  });
+  useInput("", () => hanMinLength(value, 6));
 
-  const emailIsInvalid =
-    didEdit.email &&
-    !isEmail(enteredValues.email) &&
-    !isNotEmpty(enteredValues.email);
+  //   const emailIsInvalid =
+  //     didEdit.email &&
+  //     !isEmail(enteredValues.email) &&
+  //     !isNotEmpty(enteredValues.email);
+
   const passwordIsInvalid =
     didEdit.password && !hasMinLength(enteredValues.password, 6);
 
@@ -25,24 +25,6 @@ export default function Login() {
     event.preventDefault();
 
     console.log(enteredValues);
-  }
-
-  function handleInputChage(identifier, value) {
-    setEnteredValues((prevValues) => ({
-      ...prevValues,
-      [identifier]: value,
-    }));
-    setDidEdit((prevEdit) => ({
-      ...prevEdit,
-      [identifier]: false,
-    }));
-  }
-
-  function handleInputBlur(identifier) {
-    setDidEdit((prevEdit) => ({
-      ...prevEdit,
-      [identifier]: true,
-    }));
   }
 
   return (
@@ -55,9 +37,9 @@ export default function Login() {
           id="email"
           type="email"
           name="email"
-          onBlur={() => handleInputBlur("email")}
-          onChange={(event) => handleInputChage("email", event.target.value)}
-          value={enteredValues.email}
+          onBlur={handleEmailBlur}
+          onChange={handleEmailChange}
+          value={emailValue}
           error={emailIsInvalid && "유효한 이메일을 입력해주세요."}
         />
         {/* <div className="control no-margin">
