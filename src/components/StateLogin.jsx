@@ -9,22 +9,32 @@ export default function Login() {
     value: emailValue,
     handleInputChage: handleEmailChange,
     handleInputBlur: handleEmailBlur,
+    hasError: emailHasError,
   } = useInput("", (value) => isEmail(value) && isNotEmpty(value));
 
-  useInput("", () => hanMinLength(value, 6));
+  const {
+    value: passwordValue,
+    handleInputChage: handlePasswordChange,
+    handleInputBlur: handlePasswordBlur,
+    hasError: passwordHasError,
+  } = useInput("", (value) => hasMinLength(value, 6));
 
   //   const emailIsInvalid =
   //     didEdit.email &&
   //     !isEmail(enteredValues.email) &&
   //     !isNotEmpty(enteredValues.email);
 
-  const passwordIsInvalid =
-    didEdit.password && !hasMinLength(enteredValues.password, 6);
+  //   const passwordIsInvalid =
+  //     didEdit.password && !hasMinLength(enteredValues.password, 6);
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    console.log(enteredValues);
+    if (emailHasError || passwordHasError) {
+      return;
+    }
+
+    console.log(emailValue, passwordValue);
   }
 
   return (
@@ -40,7 +50,7 @@ export default function Login() {
           onBlur={handleEmailBlur}
           onChange={handleEmailChange}
           value={emailValue}
-          error={emailIsInvalid && "유효한 이메일을 입력해주세요."}
+          error={emailHasError && "유효한 이메일을 입력해주세요."}
         />
         {/* <div className="control no-margin">
           <label htmlFor="email">Email</label>
@@ -62,10 +72,10 @@ export default function Login() {
           id="password"
           type="password"
           name="password"
-          onBlur={() => handleInputBlur("password")}
-          onChange={(event) => handleInputChage("password", event.target.value)}
-          value={enteredValues.password}
-          error={passwordIsInvalid && "유효한 비밀번호를 입력해주세요."}
+          onBlur={handlePasswordBlur}
+          onChange={handlePasswordChange}
+          value={passwordValue}
+          error={passwordHasError && "유효한 비밀번호를 입력해주세요."}
         />
 
         {/* <div className="control no-margin">
